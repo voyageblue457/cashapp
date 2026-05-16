@@ -26,8 +26,6 @@ function PosterEditPage() {
 
   const username = fetchedData?.data?.data?._doc.username;
   const password = fetchedData?.data?.data?._doc.password;
-  const posterId = fetchedData?.data?.data?._doc.posterId;
-  const verifyId = fetchedData?.data?.data?._doc.verifyId;
   const yourLinks = fetchedData?.data?.data?._doc.links;
 
   const { data: fetchedLinks, isLoading: isLoading2 } = useGetData(
@@ -37,7 +35,7 @@ function PosterEditPage() {
   const allLinks = fetchedLinks?.data?.users;
 
   const linksAvailable = allLinks?.filter((link) => {
-    const newLink = `${link}/${adminId}/${posterId}`;
+    const newLink = `${link}/${adminId}`;
     return !yourLinks?.includes(newLink);
   });
 
@@ -73,8 +71,6 @@ function PosterEditPage() {
             adminId={adminId}
             username={username}
             password={password}
-            posterId={posterId}
-            verifyId={verifyId}
             yourLinks={yourLinks}
             linksAvailable={linksAvailable}
           />

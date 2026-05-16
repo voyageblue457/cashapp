@@ -3,6 +3,8 @@ import { useState } from "react";
 import { FaUsers } from "react-icons/fa";
 import Loader from "../../components/common/Loader";
 import PosterForm from "../../components/Form/PosterForm";
+import DynamicLinkForm from "../../components/Form/DynamicLinkForm";
+import TagForm from "../../components/Form/TagForm";
 import Table from "../../components/Table";
 import { postersColumn } from "../../components/Table/columns/postersColumn";
 import Tabs from "../../components/Tabs";
@@ -21,7 +23,7 @@ import { getTimeDistance } from "./../../utils/getTimeDistance";
 function Posterspage() {
   // const { data: session } = useSession({ required: true });
   const { data: session } = useSession();
-  const { id, username, admin, adminId, verifyId } = session
+  const { id, username, admin, adminId } = session
     ? session.user
     : "";
 
@@ -48,7 +50,7 @@ function Posterspage() {
   const table = userData && (
     <Table columnsHeading={postersColumn} usersData={userData} />
   );
-  const form = <PosterForm id={id} adminId={adminId} verifyId={verifyId} />;
+  const form = <PosterForm id={id} adminId={adminId} />;
 
   const tabsData = [
     {
@@ -58,6 +60,20 @@ function Posterspage() {
     {
       label: "Add Poster",
       content: form,
+    },
+    {
+      label: "Create Link",
+      content: <DynamicLinkForm id={id} />,
+    },
+    {
+      label: "Create Tag",
+      content: (
+        <TagForm
+          id={id}
+          initialTag={session?.user?.tag}
+          initialShowTagField={session?.user?.showTagField}
+        />
+      ),
     },
   ];
 

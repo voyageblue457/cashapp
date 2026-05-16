@@ -37,20 +37,12 @@ function PosterForm({ id, adminId }) {
   const initialvalues = {
     username: "",
     password: "",
-    posterId: "",
-    verifyId: "",
     links: [],
   };
 
   const validate = Yup.object({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
-    posterId: Yup.string()
-      .required("Poster Id is required")
-      .max(3, "Not More than 3 characters")
-      .matches(/^[a-zA-Z0-9@]+$/, "Cannot contain space and special character"),
-    verifyId: Yup.string()
-      .required("Verify Id is required"),
 
     links: Yup.array().min(1, "Atleast one link is required"),
   });
@@ -60,15 +52,13 @@ function PosterForm({ id, adminId }) {
   const fetchedLinks = fetchedData?.data?.users;
 
   const handleSubmit = (values, formik) => {
-    const { username, password, posterId, verifyId, links } = values;
-    console.log("form value", username, password, posterId, verifyId, links);
+    const { username, password, links } = values;
+    console.log("form value", username, password, links);
 
     const submitvalues = {
       id: id,
       username: username,
       password: password,
-      posterId: posterId,
-      verifyId: verifyId,
       links: links,
     };
 
@@ -94,66 +84,33 @@ function PosterForm({ id, adminId }) {
             <div className="pt-7 grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-5 md:gap-y-7">
               <TextField label="Username *" name="username" type="text" />
               <TextField label="Password *" name="password" type="text" />
-              <TextField
-                label="Poster Id (max 3 characters) *"
-                name="posterId"
-                type="text"
-                maxLength={3}
-              />
-              <TextField label="Verify Id *" name="verifyId" type="text" />
-              {/* {verifyId && ( */}
-              {/* )} */}
+
               <div className="">
                 <p className="font-semibold text-gray-600">Links *</p>
                 <div className="flex flex-col">
-                  {formik.values.posterId ? (
-                    <div className="relative">
-                      <div className="mt-2 grid grid-cols-1 gap-x-10 divide-y-2 w-full border border-gray-200 overflow-hidden">
-                        {/* {verifyId
-                          ?  */}
-                          {fetchedLinks?.map((link, i) => (
-                              <CheckboxField
-                                key={i}
-                                name="links"
-                                label={`${link
-                                  ?.split("https://")
-                                  ?.join("")}/${adminId}/${
-                                  formik.values.posterId
-                                }/${formik.values.verifyId}`}
-                                value={`${link}/${adminId}/${formik.values.posterId}/${formik.values.verifyId}`}
-                                resetonchange="true"
-                              />
-                            ))}
-                          {/* : fetchedLinks?.map((link, i) => (
-                              <CheckboxField
-                                key={i}
-                                name="links"
-                                label={`${link
-                                  ?.split("https://")
-                                  ?.join("")}/${adminId}/${
-                                  formik.values.posterId
-                                }/${formik.values.verifyId}`}
-                                value={`${link}/${adminId}/${formik.values.posterId}`}
-                                resetonchange="true"
-                              />
-                            ))} */}
-                      </div>
-                      {linksError ? (
-                        <p className="absolute -bottom-5 text-red-600 text-xs font-semibold">
-                          Atleast one link is required
-                        </p>
-                      ) : (
-                        ""
-                      )}
-                      <p className="absolute -bottom-5 text-red-600 text-xs font-semibold">
-                        <ErrorMessage name="links" />
-                      </p>
+                  <div className="relative">
+                    <div className="mt-2 grid grid-cols-1 gap-x-10 divide-y-2 w-full border border-gray-200 overflow-hidden">
+                      {fetchedLinks?.map((link, i) => (
+                        <CheckboxField
+                          key={i}
+                          name="links"
+                          label={`${link?.split("https://")?.join("")}/${adminId}`}
+                          value={`${link}/${adminId}`}
+                          resetonchange="true"
+                        />
+                      ))}
                     </div>
-                  ) : (
-                    <p className="mt-2 font-semibold text-gray-600">
-                      Enter User ID First
+                    {linksError ? (
+                      <p className="absolute -bottom-5 text-red-600 text-xs font-semibold">
+                        Atleast one link is required
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                    <p className="absolute -bottom-5 text-red-600 text-xs font-semibold">
+                      <ErrorMessage name="links" />
                     </p>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>

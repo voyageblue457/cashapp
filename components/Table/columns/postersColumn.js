@@ -11,10 +11,7 @@ export const postersColumn = [
     Header: "Password",
     accessor: "password",
   },
-  {
-    Header: "Poster ID",
-    accessor: "posterId",
-  },
+
   {
     Header: "Total Links",
     accessor: "links.length",

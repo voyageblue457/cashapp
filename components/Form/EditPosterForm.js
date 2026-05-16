@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 
 function EditPosterForm({
   id,
-  posterId,
   adminId,
   username,
   password,
@@ -163,9 +162,9 @@ function EditPosterForm({
                           key={i}
                           label={`${link
                             ?.split("https://")
-                            ?.join("")}/${adminId}/${posterId}`}
+                            ?.join("")}/${adminId}`}
                           name="availableLinks"
-                          value={`${link}/${adminId}/${posterId}`}
+                          value={`${link}/${adminId}`}
                         />
                       ))}
                     </div>
