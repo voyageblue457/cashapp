@@ -7,6 +7,8 @@ import { linkColumn } from "../Table/columns/linkColumn";
 // import { linkData } from "../data/linkData";
 import useGetData from "../../hooks/useGetData";
 import { posterLinksColumn } from "../Table/columns/posterLinksColumn";
+import Tabs from "../Tabs";
+import PosterDynamicLinkForm from "../Form/PosterDynamicLinkForm";
 
 function PosterLinks({ id, admin }) {
   // const { data: session } = useSession();
@@ -69,40 +71,32 @@ function PosterLinks({ id, admin }) {
   //   }
   // };
 
-  return (
-    <div className="relative">
-      <Loader isLoading={isLoading}>
-        <div className="mt-7 bg-white p-4 lg:p-8  rounded shadow-md">
+  const tabsData = [
+    {
+      label: "All Links",
+      content: (
+        <div className="mt-7 bg-white p-4 lg:p-8 rounded shadow-md">
           <h4 className="text-xl font-semibold">All Links</h4>
           {sites && (
             <Table columnsHeading={posterLinksColumn} usersData={sites} />
           )}
-          {/* <div className="mt-4 divide-y">
-                {allSites?.map((site, i) => (
-                  <div key={i} className="grid grid-cols-2 items-center gap-10">
-                    <p className="py-3 text-sm font-semibold text-custom-gray3">
-                      {site.name}
-                    </p>
-                  </div>
-                ))}
-              </div> */}
         </div>
+      ),
+    },
+    {
+      label: "Create Link",
+      content: (
+        <div className="mt-7 bg-white p-4 lg:p-8 rounded shadow-md">
+          <PosterDynamicLinkForm id={id} assignedLinks={activeSites} />
+        </div>
+      ),
+    },
+  ];
 
-        {/* <div className="flex-1">
-            <div className="bg-white p-8 rounded shadow-md">
-              <h4 className="text-xl font-semibold">Your Links</h4>
-              <div className="mt-4 divide-y">
-                {activeSites?.map((site, i) => (
-                  <p
-                    key={i}
-                    className="py-3 text-sm font-semibold text-custom-gray3"
-                  >
-                    {site}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </div> */}
+  return (
+    <div className="relative">
+      <Loader isLoading={isLoading}>
+        <Tabs tabsData={tabsData} />
       </Loader>
     </div>
   );
