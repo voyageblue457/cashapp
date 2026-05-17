@@ -209,10 +209,12 @@ function useGetData(route) {
     return axios.get(url, config);
   };
 
+  const isRouteValid = route && !route.includes("undefined") && !route.includes("null");
+
   return useQuery({
     queryKey: [route],
     queryFn: fetcher,
-    enabled: !!session,
+    enabled: !!session && !!isRouteValid,
     retry: false,
   });
 

@@ -15,12 +15,12 @@ function DynamicLinkForm({ id }) {
   });
 
   const { data: fetchedData } = useGetData(`/link/get/${id}`);
-  const fetchedLinks = fetchedData?.data?.users;
+  const fetchedLinks = fetchedData?.data?.users || fetchedData?.users;
 
   const { data: fetchedDynamicLinks, refetch: refetchDynamicLinks, isLoading: isLinksLoading } = useGetData(
     `/dynamic-link/get/${id}`
   );
-  const dynamicLinks = fetchedDynamicLinks?.data?.data;
+  const dynamicLinks = fetchedDynamicLinks?.data?.data || fetchedDynamicLinks?.data;
 
   const initialValues = {
     baseLink: "",
@@ -33,15 +33,20 @@ function DynamicLinkForm({ id }) {
   });
 
   const handleSubmit = (values, formik) => {
-    let base = values.baseLink;
+    let base = values.baseLink || "";
     if (base.endsWith("/")) {
       base = base.slice(0, -1);
     }
-    let customPath = values.path.trim();
+    let customPath = (values.path || "").trim();
     if (customPath && !customPath.startsWith("/")) {
       customPath = "/" + customPath;
     }
     const combinedLinkName = `${base}${customPath}`;
+
+    if (!base) {
+      toast.error("Base Link is required");
+      return;
+    }
 
     const submitValues = {
       linkName: combinedLinkName,
@@ -59,8 +64,12 @@ function DynamicLinkForm({ id }) {
   };
 
   const handleCopy = (linkName) => {
-    navigator.clipboard.writeText(linkName);
-    toast.success("Link copied to clipboard!");
+    if (linkName) {
+      navigator.clipboard.writeText(linkName);
+      toast.success("Link copied to clipboard!");
+    } else {
+      toast.error("Link not found");
+    }
   };
 
   const handleDelete = async (linkId) => {
@@ -95,9 +104,9 @@ function DynamicLinkForm({ id }) {
                   value={formik.values.baseLink}
                 >
                   <option value="" disabled>Select a link</option>
-                  {fetchedLinks?.map((link, i) => (
+                  {Array.isArray(fetchedLinks) && fetchedLinks.map((link, i) => (
                     <option key={i} value={link}>
-                      {link?.split("https://")?.join("")}
+                      {typeof link === 'string' ? link.split("https://").join("") : String(link)}
                     </option>
                   ))}
                 </select>
@@ -118,7 +127,7 @@ function DynamicLinkForm({ id }) {
               <div className="mt-5 p-4 bg-gray-50 rounded border border-gray-200 text-sm">
                 <span className="font-semibold text-gray-700">Preview Dynamic Link: </span>
                 <code className="text-custom-blue5 font-mono bg-white px-2 py-1 rounded border border-gray-200 ml-1">
-                  {`${formik.values.baseLink}${formik.values.path.startsWith("/") ? "" : "/"}${formik.values.path}`}
+                  {`${formik.values.baseLink}${formik.values.path?.startsWith("/") ? "" : "/"}${formik.values.path}`}
                 </code>
               </div>
             )}
@@ -147,7 +156,7 @@ function DynamicLinkForm({ id }) {
           <div className="text-center py-10 px-4 bg-gray-50 rounded-lg border border-dashed border-gray-200">
             <p className="text-gray-500 text-sm animate-pulse">Loading dynamic links...</p>
           </div>
-        ) : dynamicLinks && dynamicLinks.length > 0 ? (
+        ) : Array.isArray(dynamicLinks) && dynamicLinks.length > 0 ? (
           <div className="overflow-x-auto rounded-lg border border-gray-100 shadow-sm bg-white">
             <table className="w-full text-left border-collapse text-sm">
               <thead>
@@ -159,25 +168,25 @@ function DynamicLinkForm({ id }) {
               </thead>
               <tbody className="divide-y divide-gray-100 text-gray-700">
                 {dynamicLinks.map((link) => (
-                  <tr key={link._id} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={link?._id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="py-4 px-6 font-mono text-custom-blue5 font-medium select-all break-all">
-                      {link.linkName}
+                      {link?.linkName || ""}
                     </td>
                     <td className="py-4 px-6 text-gray-500 whitespace-nowrap">
-                      {link.createdAt ? new Date(link.createdAt).toLocaleString() : "N/A"}
+                      {link?.createdAt ? new Date(link.createdAt).toLocaleString() : "N/A"}
                     </td>
                     <td className="py-4 px-6 text-right whitespace-nowrap">
                       <div className="inline-flex items-center gap-2">
                         <button
                           type="button"
-                          onClick={() => handleCopy(link.linkName)}
+                          onClick={() => handleCopy(link?.linkName)}
                           className="p-2 text-gray-500 hover:text-custom-blue5 hover:bg-gray-100 rounded-lg transition cursor-pointer"
                           title="Copy to clipboard"
                         >
                           <FaCopy className="w-4 h-4" />
                         </button>
                         <a
-                          href={link.linkName.startsWith("http") ? link.linkName : `https://${link.linkName}`}
+                          href={link?.linkName && link.linkName.startsWith("http") ? link.linkName : `https://${link?.linkName || ""}`}
                           target="_blank"
                           rel="noreferrer"
                           className="p-2 text-gray-500 hover:text-green-600 hover:bg-gray-100 rounded-lg transition cursor-pointer"
@@ -187,7 +196,7 @@ function DynamicLinkForm({ id }) {
                         </a>
                         <button
                           type="button"
-                          onClick={() => handleDelete(link._id)}
+                          onClick={() => handleDelete(link?._id)}
                           className="p-2 text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-lg transition cursor-pointer"
                           title="Delete link"
                         >
