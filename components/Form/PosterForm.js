@@ -35,6 +35,7 @@ function PosterForm({ id, adminId }) {
   });
 
   const initialvalues = {
+    id: id,
     username: "",
     password: "",
     links: [],
@@ -66,7 +67,7 @@ function PosterForm({ id, adminId }) {
       setLinksError(true);
     } else {
       setLinksError(false);
-      mutate(submitvalues, { onSuccess: () => formik.resetForm() });
+    mutate(submitvalues, { onSuccess: () => formik.resetForm() });
     }
   };
 
@@ -87,18 +88,18 @@ function PosterForm({ id, adminId }) {
 
               <div className="">
                 <p className="font-semibold text-gray-600">Links *</p>
-                <div className="flex flex-col">
+              <div className="flex flex-col">
                   <div className="relative">
                     <div className="mt-2 grid grid-cols-1 gap-x-10 divide-y-2 w-full border border-gray-200 overflow-hidden">
-                      {fetchedLinks?.map((link, i) => (
+                  {fetchedLinks?.map((link, i) => (
                         <CheckboxField
                           key={i}
                           name="links"
-                          label={`${link?.split("https://")?.join("")}/${adminId}`}
-                          value={`${link}/${adminId}`}
+                          label={`${link?.split("https://")?.join("")}`}
+                          value={`${link}}`}
                           resetonchange="true"
                         />
-                      ))}
+                  ))}
                     </div>
                     {linksError ? (
                       <p className="absolute -bottom-5 text-red-600 text-xs font-semibold">
