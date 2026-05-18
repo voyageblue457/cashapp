@@ -71,8 +71,8 @@ function PosterDetailsPage() {
 
                 <div className="mt-7">
                   <h4 className="text-xl text-black">Tags:</h4>
-                  <div className="mt-3 space-y-3 w-64 wrap">
-                    <p className="w-64 wrap-break-word ">{tag}</p>
+                  <div className="mt-3 w-64">
+                    <p className="break-all whitespace-pre-wrap">{tag}</p>
                   </div>
                 </div>
 

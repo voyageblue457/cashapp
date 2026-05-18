@@ -25,6 +25,10 @@ function PosterLinks({ id, admin }) {
   const dynamicLinks =
     fetchedDynamicLinks?.data?.data || fetchedDynamicLinks?.data;
 
+  // Fetch poster details to get the saved tag
+  const { data: posterData } = useGetData(`/posters/details/${id}`);
+  const tag = posterData?.data?.data?._doc?.tag || "";
+
   const handleCopy = (linkName) => {
     if (linkName) {
       navigator.clipboard.writeText(linkName);
@@ -146,6 +150,46 @@ function PosterLinks({ id, admin }) {
         </div>
       ),
     },
+    {
+      label: "Your Tag",
+      content: (
+        <div className="mt-7 bg-white p-4 lg:p-8 rounded shadow-md">
+          <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-custom-blue5"></span>
+            Your QR Tag
+          </h2>
+          {tag ? (
+            <div className="max-w-md bg-gray-50 border border-gray-100 rounded-2xl p-6 shadow-sm">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                Active Tag
+              </p>
+              <div className="flex items-center justify-between bg-white border border-gray-100 rounded-xl p-4">
+                <span className="font-mono text-custom-blue5 font-semibold text-base break-all">
+                  {tag}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopy(tag)}
+                  className="p-2 text-gray-500 hover:text-custom-blue5 hover:bg-gray-100 rounded-lg transition cursor-pointer shrink-0 ml-4"
+                  title="Copy Tag"
+                >
+                  <FaCopy className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mt-4 leading-relaxed">
+                This tag is used for generating dynamic QR codes and link identifiers for secure payment processing.
+              </p>
+            </div>
+          ) : (
+            <div className="text-center py-10 px-4 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+              <p className="text-gray-500 text-sm">
+                No active tag set for this poster.
+              </p>
+            </div>
+          )}
+        </div>
+      ),
+    }
   ];
 
   return (
