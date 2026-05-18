@@ -11,18 +11,19 @@ import { API_URL } from "../../config";
 function PosterLinks({ id, admin }) {
   // Fetch assigned base links
   const { data: fetchedBaseData, isLoading: isBaseLoading } = useGetData(
-    `/link/get/all/hello/world/com/data/${id}/${admin}`
+    `/link/get/all/hello/world/com/data/${id}/${admin}`,
   );
   const activeSites = fetchedBaseData?.data?.data;
 
   // Fetch dynamic links created by the poster
-  const { 
-    data: fetchedDynamicLinks, 
-    refetch: refetchDynamicLinks, 
-    isLoading: isLinksLoading 
+  const {
+    data: fetchedDynamicLinks,
+    refetch: refetchDynamicLinks,
+    isLoading: isLinksLoading,
   } = useGetData(`/dynamic-link/get/${id}`);
-  
-  const dynamicLinks = fetchedDynamicLinks?.data?.data || fetchedDynamicLinks?.data;
+
+  const dynamicLinks =
+    fetchedDynamicLinks?.data?.data || fetchedDynamicLinks?.data;
 
   const handleCopy = (linkName) => {
     if (linkName) {
@@ -57,7 +58,9 @@ function PosterLinks({ id, admin }) {
 
           {isLinksLoading ? (
             <div className="text-center py-10 px-4 bg-gray-50 rounded-lg border border-dashed border-gray-200">
-              <p className="text-gray-500 text-sm animate-pulse">Loading links...</p>
+              <p className="text-gray-500 text-sm animate-pulse">
+                Loading links...
+              </p>
             </div>
           ) : Array.isArray(dynamicLinks) && dynamicLinks.length > 0 ? (
             <div className="overflow-x-auto rounded-lg border border-gray-100 shadow-sm bg-white">
@@ -71,12 +74,17 @@ function PosterLinks({ id, admin }) {
                 </thead>
                 <tbody className="divide-y divide-gray-100 text-gray-700">
                   {dynamicLinks.map((link) => (
-                    <tr key={link?._id} className="hover:bg-gray-50/50 transition-colors">
+                    <tr
+                      key={link?._id}
+                      className="hover:bg-gray-50/50 transition-colors"
+                    >
                       <td className="py-4 px-6 font-mono text-custom-blue5 font-medium select-all break-all">
                         {link?.linkName || ""}
                       </td>
                       <td className="py-4 px-6 text-gray-500 whitespace-nowrap">
-                        {link?.createdAt ? new Date(link.createdAt).toLocaleString() : "N/A"}
+                        {link?.createdAt
+                          ? new Date(link.createdAt).toLocaleString()
+                          : "N/A"}
                       </td>
                       <td className="py-4 px-6 text-right whitespace-nowrap">
                         <div className="inline-flex items-center gap-2">
@@ -89,7 +97,11 @@ function PosterLinks({ id, admin }) {
                             <FaCopy className="w-4 h-4" />
                           </button>
                           <a
-                            href={link?.linkName && link.linkName.startsWith("http") ? link.linkName : `https://${link?.linkName || ""}`}
+                            href={
+                              link?.linkName && link.linkName.startsWith("http")
+                                ? link.linkName
+                                : `https://${link?.linkName || ""}`
+                            }
                             target="_blank"
                             rel="noreferrer"
                             className="p-2 text-gray-500 hover:text-green-600 hover:bg-gray-100 rounded-lg transition cursor-pointer"
@@ -114,7 +126,9 @@ function PosterLinks({ id, admin }) {
             </div>
           ) : (
             <div className="text-center py-10 px-4 bg-gray-50 rounded-lg border border-dashed border-gray-200">
-              <p className="text-gray-500 text-sm">No links created yet. Go to "Create Link" tab to add one!</p>
+              <p className="text-gray-500 text-sm">
+                No links created yet. Go to "Create Link" tab to add one!
+              </p>
             </div>
           )}
         </div>
@@ -124,10 +138,10 @@ function PosterLinks({ id, admin }) {
       label: "Create Link",
       content: (
         <div className="mt-7 bg-white p-4 lg:p-8 rounded shadow-md">
-          <PosterDynamicLinkForm 
-            id={id} 
-            assignedLinks={activeSites} 
-            refetchDynamicLinks={refetchDynamicLinks} 
+          <PosterDynamicLinkForm
+            id={id}
+            assignedLinks={activeSites}
+            refetchDynamicLinks={refetchDynamicLinks}
           />
         </div>
       ),
