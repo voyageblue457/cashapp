@@ -33,7 +33,7 @@ function Layout({ children, heading }) {
 
   const id = admin ? data?.user?.adminId : data?.user?.posterId;
   const { data: amountSummary } = useGetData(
-    id ? `/amount/summary/${id}/${admin}` : null
+    id ? `/amount/summary/${id}` : null
   );
 
   useEffect(() => {

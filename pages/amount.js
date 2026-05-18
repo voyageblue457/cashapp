@@ -45,7 +45,7 @@ function AmountPage() {
   const id = admin ? session?.user?.adminId : session?.user?.posterId;
 
   const { data: fetchedData, isLoading } = useGetData(
-    id ? `/amount/list/${id}/${admin}` : null
+    id ? `/amount/list/${id}` : null
   );
 
   const details = fetchedData?.data?.data;
