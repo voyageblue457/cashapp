@@ -4,23 +4,27 @@ import Table from "../../../components/Table";
 import { collectionColumn } from "../../../components/Table/columns/collectionColumn";
 import useGetData from "../../../hooks/useGetData";
 import Loader from "../../../components/common/Loader";
+import { useSession } from "next-auth/react";
 
 function PosterDetailsPage() {
+  const { data: session } = useSession();
+  const { showTagField } = session ? session.user : "";
   const { back, query } = useRouter();
   const { posterDetailsId } = query;
   const { data, isLoading } = useGetData(`/posters/details/${posterDetailsId}`);
 
-  // console.log("poster collection", data?.data?.data);
+  console.log("poster collection", data);
 
   // const { username, password, posterId, links, details } = data
   //   ? data?.data?.data
   //   : "";
+  // console.log(data)
 
   const { _doc, details } = data ? data?.data?.data : "";
 // console.log("details",details)
   const { username, password, posterId, links, tag } = _doc ? _doc : "";
 
-  console.log("poster data _doc:", _doc);
+  // console.log("poster data _doc:", _doc);
   // console.log("poster id", posterId);
 
   return (
@@ -64,12 +68,14 @@ function PosterDetailsPage() {
                   {links && links?.map((link, i) => <p key={i}>{link}</p>)}
                 </div>
               </div>
-              <div className="mt-7">
-                <h4 className="text-xl text-black">Tags:</h4>
-                <div className="mt-3 space-y-3">
-                  {tag && <p>{tag}</p>}
+
+                <div className="mt-7">
+                  <h4 className="text-xl text-black">Tags:</h4>
+                  <div className="mt-3 space-y-3 w-64 wrap">
+                    <p className="w-64 wrap-break-word ">{tag}</p>
+                  </div>
                 </div>
-              </div>
+
             </div>
           </div>
 
