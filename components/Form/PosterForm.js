@@ -96,7 +96,7 @@ function PosterForm({ id, adminId }) {
                           key={i}
                           name="links"
                           label={`${link?.split("https://")?.join("")}`}
-                          value={`${link}}`}
+                          value={`${link}`}
                           resetonchange="true"
                         />
                   ))}
