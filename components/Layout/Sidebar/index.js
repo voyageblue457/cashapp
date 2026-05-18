@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaAngleLeft } from "react-icons/fa";
 
-function Sidebar({ showMenu, setShowMenu, node, name, navLinks }) {
+function Sidebar({ showMenu, setShowMenu, node, name, navLinks, admin, totalAmount }) {
   // const [role, setRole] = useState("root");
   const router = useRouter();
 
@@ -60,6 +60,20 @@ function Sidebar({ showMenu, setShowMenu, node, name, navLinks }) {
               <FaAngleLeft size={20} />
             </span>
           </div>
+
+          {totalAmount !== undefined && (
+            <div className="mx-4 my-2 p-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg border border-emerald-400/20 transform hover:scale-[1.02] transition-transform duration-300">
+              <p className="text-xs uppercase tracking-wider text-emerald-100/80 font-medium font-semibold">
+                {admin ? "Total Collections" : "My Collections"}
+              </p>
+              <h2 className="text-2xl font-bold mt-1 text-white tracking-tight">
+                ${parseFloat(totalAmount || 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
+              </h2>
+            </div>
+          )}
 
           <div className="mt-3 mx-3 space-y-5">
             {navLinks?.map((navLink, i) => (

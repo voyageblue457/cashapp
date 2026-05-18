@@ -8,6 +8,7 @@ import useToggle from "../../hooks/useToggle";
 import Pusher from "pusher-js";
 import useLogOut from "../../hooks/useLogOut";
 import { useEffect } from "react";
+import useGetData from "../../hooks/useGetData";
 
 function Layout({ children, heading }) {
   // const [showMenu, setShowMenu] = useState(false);
@@ -29,6 +30,11 @@ function Layout({ children, heading }) {
   const username = data?.user?.username;
 
   const adminId = data?.user.adminId;
+
+  const id = admin ? data?.user?.adminId : data?.user?.posterId;
+  const { data: amountSummary } = useGetData(
+    id ? `/amount/summary/${id}/${admin}` : null
+  );
 
   useEffect(() => {
     if (adminId) {
@@ -95,6 +101,8 @@ function Layout({ children, heading }) {
           setShowMenu={setShowMenu}
           node={node}
           navLinks={filteredLinks()}
+          admin={admin}
+          totalAmount={amountSummary?.data?.total}
         />
 
         <div className="lg:flex-1">
