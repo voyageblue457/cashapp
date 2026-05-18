@@ -22,7 +22,7 @@ function PosterDetailsPage() {
 
   const { _doc, details } = data ? data?.data?.data : "";
 // console.log("details",details)
-  const { username, password, posterId, links, tag } = _doc ? _doc : "";
+  const { username, password, posterId, links, tag, root } = _doc ? _doc : "";
 
   // console.log("poster data _doc:", _doc);
   // console.log("poster id", posterId);
@@ -59,6 +59,9 @@ function PosterDetailsPage() {
                 </p>
                 <p className="grid grid-cols-2">
                   <span>Poster ID:</span> <span>{posterId}</span>
+                </p>
+                <p className="grid grid-cols-2">
+                  <span>Admin:</span> <span>{root?.username || "N/A"}</span>
                 </p>
               </div>
 
