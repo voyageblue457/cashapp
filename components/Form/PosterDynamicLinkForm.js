@@ -4,7 +4,7 @@ import usePostData from "../../hooks/usePostData";
 import { TextField } from "../common/InputField";
 import { toast } from "react-toastify";
 
-function PosterDynamicLinkForm({ id, assignedLinks }) {
+function PosterDynamicLinkForm({ id, assignedLinks, refetchDynamicLinks }) {
   const { mutate, isLoading } = usePostData({
     path: "/link/add",
   });
@@ -29,6 +29,9 @@ function PosterDynamicLinkForm({ id, assignedLinks }) {
       onSuccess: () => {
         toast.success("Link updated successfully");
         formik.resetForm();
+        if (refetchDynamicLinks) {
+          refetchDynamicLinks();
+        }
       },
     });
   };

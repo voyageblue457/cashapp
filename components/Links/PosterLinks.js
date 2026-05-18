@@ -1,84 +1,121 @@
-import { useSession } from "next-auth/react";
 import React from "react";
-import { FaGlobe } from "react-icons/fa";
+import { FaCopy, FaExternalLinkAlt, FaTrashAlt } from "react-icons/fa";
 import Loader from "../common/Loader";
-import Table from "../Table";
-import { linkColumn } from "../Table/columns/linkColumn";
-// import { linkData } from "../data/linkData";
 import useGetData from "../../hooks/useGetData";
-import { posterLinksColumn } from "../Table/columns/posterLinksColumn";
 import Tabs from "../Tabs";
 import PosterDynamicLinkForm from "../Form/PosterDynamicLinkForm";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { API_URL } from "../../config";
 
 function PosterLinks({ id, admin }) {
-  // const { data: session } = useSession();
-  // const { id, username, admin, adminId } = session ? session.user : "";
-
-  // const { data: fetchedData, isLoading } = useGetData(
-  //   `/link/get/${id}/${admin}`
-  // );
-  const { data: fetchedData, isLoading } = useGetData(
+  // Fetch assigned base links
+  const { data: fetchedBaseData, isLoading: isBaseLoading } = useGetData(
     `/link/get/all/hello/world/com/data/${id}/${admin}`
   );
-  // console.log("links", fetchedData);
+  const activeSites = fetchedBaseData?.data?.data;
 
-  // const allSites = fetchedData?.sites;
-  const activeSites = fetchedData?.data?.data;
+  // Fetch dynamic links created by the poster
+  const { 
+    data: fetchedDynamicLinks, 
+    refetch: refetchDynamicLinks, 
+    isLoading: isLinksLoading 
+  } = useGetData(`/dynamic-link/get/${id}`);
+  
+  const dynamicLinks = fetchedDynamicLinks?.data?.data || fetchedDynamicLinks?.data;
 
+  const handleCopy = (linkName) => {
+    if (linkName) {
+      navigator.clipboard.writeText(linkName);
+      toast.success("Link copied to clipboard!");
+    } else {
+      toast.error("Link not found");
+    }
+  };
 
-  const sites = activeSites?.map((site) => {
-    return {
-      site: site,
-    };
-  });
-  // const x = allSites?.map((site) => site.name);
-  // const y = activeSites?.map((site) => site);
-
-  // const status = () => {
-  //   const check = x?.map((site) => {
-  //     if (y.includes(site)) {
-  //       return "active";
-  //     } else {
-  //       return "inactive";
-  //     }
-  //   });
-  //   return check;
-  // };
-
-  // console.log(status());
-
-  // const linksData = allSites?.map((site) => {
-  //   const checkStatus = () => {
-  //     if (activeSites?.includes(site.name)) {
-  //       return "Active";
-  //     } else {
-  //       return "Inactive";
-  //     }
-  //   };
-
-  //   return {
-  //     site: site.name,
-  //     status: checkStatus(),
-  //   };
-  // });
-  // console.log("table", linksData);
-
-  // const checkStatus = (site) => {
-  //   if (activeSites?.includes(site.name)) {
-  //     return "Active";
-  //   } else {
-  //     return "Inactive";
-  //   }
-  // };
+  const handleDelete = async (linkId) => {
+    if (window.confirm("Are you sure you want to delete this dynamic link?")) {
+      try {
+        await axios.delete(`${API_URL}/dynamic-link/delete/${linkId}`);
+        toast.success("Dynamic link deleted successfully");
+        refetchDynamicLinks();
+      } catch (err) {
+        toast.error("Failed to delete dynamic link");
+      }
+    }
+  };
 
   const tabsData = [
     {
       label: "All Links",
       content: (
         <div className="mt-7 bg-white p-4 lg:p-8 rounded shadow-md">
-          <h4 className="text-xl font-semibold">All Links</h4>
-          {sites && (
-            <Table columnsHeading={posterLinksColumn} usersData={sites} />
+          <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-custom-blue5"></span>
+            Your Created Links
+          </h2>
+
+          {isLinksLoading ? (
+            <div className="text-center py-10 px-4 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+              <p className="text-gray-500 text-sm animate-pulse">Loading links...</p>
+            </div>
+          ) : Array.isArray(dynamicLinks) && dynamicLinks.length > 0 ? (
+            <div className="overflow-x-auto rounded-lg border border-gray-100 shadow-sm bg-white">
+              <table className="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-100 text-gray-600 font-semibold uppercase text-xs">
+                    <th className="py-4 px-6">Dynamic Link</th>
+                    <th className="py-4 px-6">Created Date</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 text-gray-700">
+                  {dynamicLinks.map((link) => (
+                    <tr key={link?._id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="py-4 px-6 font-mono text-custom-blue5 font-medium select-all break-all">
+                        {link?.linkName || ""}
+                      </td>
+                      <td className="py-4 px-6 text-gray-500 whitespace-nowrap">
+                        {link?.createdAt ? new Date(link.createdAt).toLocaleString() : "N/A"}
+                      </td>
+                      <td className="py-4 px-6 text-right whitespace-nowrap">
+                        <div className="inline-flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(link?.linkName)}
+                            className="p-2 text-gray-500 hover:text-custom-blue5 hover:bg-gray-100 rounded-lg transition cursor-pointer"
+                            title="Copy to clipboard"
+                          >
+                            <FaCopy className="w-4 h-4" />
+                          </button>
+                          <a
+                            href={link?.linkName && link.linkName.startsWith("http") ? link.linkName : `https://${link?.linkName || ""}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="p-2 text-gray-500 hover:text-green-600 hover:bg-gray-100 rounded-lg transition cursor-pointer"
+                            title="Open in new tab"
+                          >
+                            <FaExternalLinkAlt className="w-4 h-4" />
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(link?._id)}
+                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-lg transition cursor-pointer"
+                            title="Delete link"
+                          >
+                            <FaTrashAlt className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="text-center py-10 px-4 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+              <p className="text-gray-500 text-sm">No links created yet. Go to "Create Link" tab to add one!</p>
+            </div>
           )}
         </div>
       ),
@@ -87,7 +124,11 @@ function PosterLinks({ id, admin }) {
       label: "Create Link",
       content: (
         <div className="mt-7 bg-white p-4 lg:p-8 rounded shadow-md">
-          <PosterDynamicLinkForm id={id} assignedLinks={activeSites} />
+          <PosterDynamicLinkForm 
+            id={id} 
+            assignedLinks={activeSites} 
+            refetchDynamicLinks={refetchDynamicLinks} 
+          />
         </div>
       ),
     },
@@ -95,7 +136,7 @@ function PosterLinks({ id, admin }) {
 
   return (
     <div className="relative">
-      <Loader isLoading={isLoading}>
+      <Loader isLoading={isBaseLoading}>
         <Tabs tabsData={tabsData} />
       </Loader>
     </div>
