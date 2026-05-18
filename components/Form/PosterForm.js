@@ -38,6 +38,7 @@ function PosterForm({ id, adminId }) {
     id: id,
     username: "",
     password: "",
+    tag: "",
     links: [],
   };
 
@@ -53,13 +54,14 @@ function PosterForm({ id, adminId }) {
   const fetchedLinks = fetchedData?.data?.users;
 
   const handleSubmit = (values, formik) => {
-    const { username, password, links } = values;
+    const { username, password, tag, links } = values;
     console.log("form value", username, password, links);
 
     const submitvalues = {
       id: id,
       username: username,
       password: password,
+      tag: tag,
       links: links,
     };
 
@@ -85,6 +87,7 @@ function PosterForm({ id, adminId }) {
             <div className="pt-7 grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-5 md:gap-y-7">
               <TextField label="Username *" name="username" type="text" />
               <TextField label="Password *" name="password" type="text" />
+              <TextField label="Tag *" name="tag" type="text" />
 
               <div className="">
                 <p className="font-semibold text-gray-600">Links *</p>
