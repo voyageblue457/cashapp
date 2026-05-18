@@ -9,7 +9,7 @@ function PosterDynamicLinkForm({ id, assignedLinks, refetchDynamicLinks }) {
     path: "/link/add",
   });
 
-  console.log(assignedLinks);
+  // console.log(assignedLinks);
 
   const initialValues = {
     baseLink: "",
