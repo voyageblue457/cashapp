@@ -17,8 +17,8 @@ function PosterDetailsPage() {
   //   : "";
 
   const { _doc, details } = data ? data?.data?.data : "";
-
-  const { username, password, posterId, links } = _doc ? _doc : "";
+// console.log("details",details)
+  const { username, password, posterId, links, tag } = _doc ? _doc : "";
 
   console.log("poster data _doc:", _doc);
   // console.log("poster id", posterId);
@@ -62,6 +62,12 @@ function PosterDetailsPage() {
                 <h4 className="text-xl text-black">Links:</h4>
                 <div className="mt-3 space-y-3">
                   {links && links?.map((link, i) => <p key={i}>{link}</p>)}
+                </div>
+              </div>
+              <div className="mt-7">
+                <h4 className="text-xl text-black">Tags:</h4>
+                <div className="mt-3 space-y-3">
+                  {tag && <p>{tag}</p>}
                 </div>
               </div>
             </div>
