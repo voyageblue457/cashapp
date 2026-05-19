@@ -52,7 +52,7 @@ function Sidebar({ showMenu, setShowMenu, node, name, navLinks, admin, totalAmou
       >
         <div className="  items-center gap-10">
           <div className="text-white py-[16px] font-semibold flex justify-between items-center">
-            <h1 className=" pl-6 text-xl lg:text-2xl">Tool Tracker</h1>
+            <h1 className=" pl-6 text-xl lg:text-2xl">Cash Tool</h1>
             <span
               className="p-1 mr-5 rounded-full border-2 border-custom-blue2 text-custom-blue2 lg:hidden"
               onClick={() => setShowMenu(!showMenu)}
@@ -63,7 +63,7 @@ function Sidebar({ showMenu, setShowMenu, node, name, navLinks, admin, totalAmou
 
           {totalAmount !== undefined && (
             <div className="mx-4 my-2 p-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg border border-emerald-400/20 transform hover:scale-[1.02] transition-transform duration-300">
-              <p className="text-xs uppercase tracking-wider text-emerald-100/80 font-medium font-semibold">
+              <p className="text-xs uppercase tracking-wider text-emerald-100/80 font-medium ">
                 {admin ? "Total Collections" : "My Collections"}
               </p>
               <h2 className="text-2xl font-bold mt-1 text-white tracking-tight">
