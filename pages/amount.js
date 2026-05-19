@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { FaDollarSign } from "react-icons/fa";
 import Loader from "../components/common/Loader";
@@ -5,8 +6,10 @@ import Table from "../components/Table";
 import useGetData from "../hooks/useGetData";
 import { getTimeDistance } from "../utils/getTimeDistance";
 import Link from "next/link";
+import { toast } from "react-toastify";
+import { API_URL } from "../config";
 
-const getAmountColumn = (admin, posterUsername) => {
+const getAmountColumn = (admin, posterUsername, handleCheckStatus, checkingIds) => {
   const columns = [
     {
       Header: "Website",
@@ -66,6 +69,38 @@ const getAmountColumn = (admin, posterUsername) => {
         );
       }
     },
+    admin && {
+      Header: "Check Payment",
+      accessor: "_id",
+      width: "auto",
+      Cell: ({ row }) => {
+        const hasInvoice = !!row.original.rHash;
+        const isChecking = checkingIds && checkingIds[row.original._id];
+        const statusVal = row.original.status || "pending";
+        const isSuccess = statusVal === "success" || statusVal === "successful";
+
+        if (!hasInvoice) {
+          return <span className="text-gray-400 text-xs italic">No LND invoice</span>;
+        }
+
+        if (isSuccess) {
+          return <span className="text-green-600 font-bold text-xs uppercase tracking-wider">Paid / Verified</span>;
+        }
+
+        return (
+          <button
+            onClick={() => handleCheckStatus && handleCheckStatus(row.original._id)}
+            disabled={isChecking}
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded shadow-sm hover:shadow transition-all disabled:opacity-50 flex items-center gap-1 active:scale-95 cursor-pointer"
+          >
+            {isChecking && (
+              <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            )}
+            <span>Verify LND</span>
+          </button>
+        );
+      }
+    },
     {
       Header: "Time",
       accessor: "createdAt",
@@ -88,14 +123,35 @@ function AmountPage() {
 
   console.log(id, 'posterId')
 
-  const { data: fetchedData, isLoading } = useGetData(
+  const [checkingIds, setCheckingIds] = useState({});
+
+  const { data: fetchedData, isLoading, refetch } = useGetData(
     id ? `/amount/list/${id}` : null
   );
+
+  const handleCheckStatus = async (infoId) => {
+    setCheckingIds((prev) => ({ ...prev, [infoId]: true }));
+    try {
+      const res = await fetch(`${API_URL}/payment/check/${infoId}`);
+      const data = await res.json();
+      if (data && data.success) {
+        toast.success("Payment verified & marked as Paid!");
+        refetch();
+      } else {
+        toast.info(data.error || "Payment is still pending.");
+      }
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+      toast.error("Failed to verify payment status. Try again.");
+    } finally {
+      setCheckingIds((prev) => ({ ...prev, [infoId]: false }));
+    }
+  };
 
   const details = fetchedData?.data?.data;
   console.log('details', details)
 
-  const columns = getAmountColumn(admin, session?.user?.username);
+  const columns = getAmountColumn(admin, session?.user?.username, handleCheckStatus, checkingIds);
 
   return (
     <div className="relative">
