@@ -2,10 +2,7 @@ import {
   FaHome,
   FaEnvelope,
   FaUsers,
-  FaImage,
   FaGlobe,
-  FaMousePointer,
-  FaQrcode,
   FaDollarSign,
 } from "react-icons/fa";
 
@@ -16,18 +13,8 @@ export const dashboardLinks = [
     icon: <FaHome />,
   },
   {
-    name: "Information",
-    link: "/information",
-    icon: <FaEnvelope />,
-  },
-  {
     name: "Collections",
     link: "/collections",
-    icon: <FaEnvelope />,
-  },
-  {
-    name: "Cash App",
-    link: "/cash-app",
     icon: <FaEnvelope />,
   },
   {
@@ -41,24 +28,9 @@ export const dashboardLinks = [
     icon: <FaUsers />,
   },
   {
-    name: "ID Card",
-    link: "/id-card",
-    icon: <FaImage />,
-  },
-  {
     name: "Links",
     link: "/links",
     icon: <FaGlobe />,
-  },
-  // {
-  //   name: "Clicks",
-  //   link: "/clicks",
-  //   icon: <FaMousePointer />,
-  // },
-  {
-    name: "QR Code",
-    link: "/qr-code",
-    icon: <FaQrcode />,
   },
 ];
 // export const adminLinks = [
