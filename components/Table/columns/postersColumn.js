@@ -6,6 +6,13 @@ export const postersColumn = [
   {
     Header: "Username",
     accessor: "username",
+    Cell: ({ row, value }) => (
+      <Link href={`/posters/details/${row.original._id}`}>
+        <span className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer font-semibold">
+          {value}
+        </span>
+      </Link>
+    ),
   },
   {
     Header: "Password",

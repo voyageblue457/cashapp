@@ -64,6 +64,14 @@ function PosterDetailsPage() {
                   <span>Admin:</span> <span>{root?.username || "N/A"}</span>
                 </p>
               </div>
+              <div className="my-3 space-y-3">
+                <p>Total Amount: </p>
+                <p>Total pending Amount: </p>
+                <p>Total Paid Amount: </p>
+                <p>Total Total Withdrawn: </p>
+                <p>Total Remaining Amount: </p>
+
+              </div>
 
               <div className="mt-7">
                 <h4 className="text-xl text-black">Links:</h4>

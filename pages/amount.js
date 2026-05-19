@@ -4,44 +4,82 @@ import Loader from "../components/common/Loader";
 import Table from "../components/Table";
 import useGetData from "../hooks/useGetData";
 import { getTimeDistance } from "../utils/getTimeDistance";
+import Link from "next/link";
 
-const getAmountColumn = (admin, posterUsername) => [
-  {
-    Header: "Website",
-    accessor: "site",
-    width: "auto",
-  },
-  {
-    Header: "Username",
-    accessor: (row) => row.root?.username || (admin ? "Admin" : (posterUsername || "Admin")),
-    id: "username",
-    width: "auto",
-  },
-  {
-    Header: "Amount",
-    accessor: "amount",
-    width: "auto",
-    Cell: ({ value }) => {
-      const parsed = parseFloat(value);
-      return (
-        <span className="font-bold text-emerald-600">
-          {value ? (!isNaN(parsed) ? `$${parsed.toFixed(2)}` : value) : "-"}
-        </span>
-      );
+const getAmountColumn = (admin, posterUsername) => {
+  const columns = [
+    {
+      Header: "Website",
+      accessor: "site",
+      width: "auto",
     },
-  },
-  {
-    Header: "Time",
-    accessor: "createdAt",
-    disableSortBy: true,
-    width: "auto",
-    Cell: ({ row }) => (
-      <div className="flex justify-center items-center">
-        {row.original.createdAt && getTimeDistance(row.original.createdAt)}
-      </div>
-    ),
-  },
-];
+    admin && {
+      Header: "Username",
+      accessor: (row) => row.root?.username || (admin ? "Admin" : (posterUsername || "Admin")),
+      id: "username",
+      width: "auto",
+      Cell: ({ row, value }) => {
+        const posterIdVal = row.original.root?._id || row.original.poster || row.original.posterId;
+        if (admin && posterIdVal) {
+          return (
+            <Link href={`/posters/details/${posterIdVal}`}>
+              <span className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer font-semibold">
+                {value}
+              </span>
+            </Link>
+          );
+        }
+        return <span>{value}</span>;
+      }
+    },
+    {
+      Header: "Amount",
+      accessor: "amount",
+      width: "auto",
+      Cell: ({ value }) => {
+        const parsed = parseFloat(value);
+        return (
+          <span className="font-bold text-emerald-600">
+            {value ? (!isNaN(parsed) ? `$${parsed.toFixed(2)}` : value) : "-"}
+          </span>
+        );
+      },
+    },
+    {
+      Header: "Status",
+      accessor: "status",
+      width: "auto",
+      Cell: ({ value }) => {
+        const statusVal = value || "pending";
+        let bg = "bg-yellow-100 text-yellow-800 border border-yellow-200";
+        if (statusVal === "successful" || statusVal === "success") {
+          bg = "bg-green-100 text-green-800 border border-green-200";
+        } else if (statusVal === "wrong password" || statusVal === "pass-wrong") {
+          bg = "bg-red-100 text-red-800 border border-red-200";
+        } else if (statusVal === "code verified" || statusVal === "code-verify") {
+          bg = "bg-blue-100 text-blue-800 border border-blue-200";
+        }
+        return (
+          <span className={`px-2 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider ${bg}`}>
+            {statusVal}
+          </span>
+        );
+      }
+    },
+    {
+      Header: "Time",
+      accessor: "createdAt",
+      disableSortBy: true,
+      width: "auto",
+      Cell: ({ row }) => (
+        <div className="flex justify-center items-center">
+          {row.original.createdAt && getTimeDistance(row.original.createdAt)}
+        </div>
+      ),
+    },
+  ];
+  return columns.filter(Boolean);
+};
 
 function AmountPage() {
   const { data: session } = useSession();
