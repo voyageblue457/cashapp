@@ -69,7 +69,7 @@ const getAmountColumn = (admin, posterUsername, handleCheckStatus, checkingIds) 
         );
       }
     },
-    admin && {
+    {
       Header: "Check Payment",
       accessor: "_id",
       width: "auto",
@@ -149,7 +149,7 @@ function AmountPage() {
   };
 
   const details = fetchedData?.data?.data;
-  console.log('details', details)
+  // console.log('details', details)
 
   const columns = getAmountColumn(admin, session?.user?.username, handleCheckStatus, checkingIds);
 
