@@ -96,7 +96,7 @@ const getAmountColumn = (admin, posterUsername, handleCheckStatus, checkingIds) 
             {isChecking && (
               <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
             )}
-            <span>Verify LND</span>
+            <span>Verify</span>
           </button>
         );
       }
