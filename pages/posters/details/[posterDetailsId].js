@@ -21,8 +21,24 @@ function PosterDetailsPage() {
   // console.log(data)
 
   const { _doc, details } = data ? data?.data?.data : "";
-// console.log("details",details)
+  // console.log("details",details)
   const { username, password, posterId, links, tag, root } = _doc ? _doc : "";
+
+  let totalAmount = 0;
+  let pendingAmount = 0;
+
+  if (details && Array.isArray(details)) {
+    details.forEach((item) => {
+      const amt = parseFloat(item.amount);
+      if (!isNaN(amt)) {
+        totalAmount += amt;
+        const statusVal = (item.status || "pending").toLowerCase();
+        if (statusVal === "pending") {
+          pendingAmount += amt;
+        }
+      }
+    });
+  }
 
   // console.log("poster data _doc:", _doc);
   // console.log("poster id", posterId);
@@ -64,13 +80,28 @@ function PosterDetailsPage() {
                   <span>Admin:</span> <span>{root?.username || "N/A"}</span>
                 </p>
               </div>
-              <div className="my-3 space-y-3">
-                <p>Total Amount: </p>
-                <p>Total pending Amount: </p>
-                <p>Total Paid Amount: </p>
-                <p>Total Total Withdrawn: </p>
-                <p>Total Remaining Amount: </p>
-
+              <div className="mt-5 pt-3 border-t border-gray-100 space-y-3">
+                <p className="grid grid-cols-2">
+                  <span>Total Amount:</span>{" "}
+                  <span className="font-bold text-emerald-600">
+                    ${totalAmount.toFixed(2)}
+                  </span>
+                </p>
+                <p className="grid grid-cols-2">
+                  <span>Pending Amount:</span>{" "}
+                  <span className="font-bold text-yellow-600">
+                    ${pendingAmount.toFixed(2)}
+                  </span>
+                </p>
+                <p className="grid grid-cols-2">
+                  <span>Total Paid Amount:</span> <span>$0.00</span>
+                </p>
+                <p className="grid grid-cols-2">
+                  <span>Total Withdrawn:</span> <span>$0.00</span>
+                </p>
+                <p className="grid grid-cols-2">
+                  <span>Remaining Amount:</span> <span>$0.00</span>
+                </p>
               </div>
 
               <div className="mt-7">
@@ -80,13 +111,12 @@ function PosterDetailsPage() {
                 </div>
               </div>
 
-                <div className="mt-7">
-                  <h4 className="text-xl text-black">Tags:</h4>
-                  <div className="mt-3 w-64">
-                    <p className="break-all whitespace-pre-wrap">{tag}</p>
-                  </div>
+              <div className="mt-7">
+                <h4 className="text-xl text-black">Tags:</h4>
+                <div className="mt-3 w-64">
+                  <p className="break-all whitespace-pre-wrap">{tag}</p>
                 </div>
-
+              </div>
             </div>
           </div>
 
