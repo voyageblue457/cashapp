@@ -5,26 +5,30 @@ import Table from "../components/Table";
 import useGetData from "../hooks/useGetData";
 import { getTimeDistance } from "../utils/getTimeDistance";
 
-const amountColumn = [
+const getAmountColumn = (admin, posterUsername) => [
   {
     Header: "Website",
     accessor: "site",
     width: "auto",
   },
   {
-    Header: "Email/Phone",
-    accessor: "email",
+    Header: "Username",
+    accessor: (row) => row.root?.username || (admin ? "Admin" : (posterUsername || "Admin")),
+    id: "username",
     width: "auto",
   },
   {
     Header: "Amount",
     accessor: "amount",
     width: "auto",
-    Cell: ({ value }) => (
-      <span className="font-bold text-emerald-600">
-        {value ? `$${parseFloat(value).toFixed(2)}` : "-"}
-      </span>
-    ),
+    Cell: ({ value }) => {
+      const parsed = parseFloat(value);
+      return (
+        <span className="font-bold text-emerald-600">
+          {value ? (!isNaN(parsed) ? `$${parsed.toFixed(2)}` : value) : "-"}
+        </span>
+      );
+    },
   },
   {
     Header: "Time",
@@ -42,13 +46,18 @@ const amountColumn = [
 function AmountPage() {
   const { data: session } = useSession();
   const admin = session?.user?.admin;
-  const id = admin ? session?.user?.adminId : session?.user?.posterId;
+  const id = admin ? session?.user?.adminId : (session?.user?.posterId || session?.user?.id);
+
+  console.log(id, 'posterId')
 
   const { data: fetchedData, isLoading } = useGetData(
     id ? `/amount/list/${id}` : null
   );
 
   const details = fetchedData?.data?.data;
+  console.log('details', details)
+
+  const columns = getAmountColumn(admin, session?.user?.username);
 
   return (
     <div className="relative">
@@ -65,7 +74,7 @@ function AmountPage() {
         <div className="mt-7">
           <div className="p-4 bg-white rounded shadow-md lg:p-8">
             {details && details.length > 0 ? (
-              <Table columnsHeading={amountColumn} usersData={details} />
+              <Table columnsHeading={columns} usersData={details} />
             ) : (
               <p className="text-gray-500 py-4 text-center">No amount logs found</p>
             )}

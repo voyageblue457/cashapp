@@ -75,7 +75,7 @@ function HomePage() {
   const { data } = useSession();
   const admin = data?.user?.admin;
   const adminId = data?.user?.adminId;
-  const posterId = data?.user?.posterId;
+  const posterId = data?.user?.posterId || data?.user?.id;
 
   const route = admin ? `/${adminId}` : `/${adminId}/${posterId}`;
 

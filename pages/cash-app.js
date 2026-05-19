@@ -10,7 +10,7 @@ function CashAppPage() {
   // const { username, password, posterId, links, details } = data?.data;
 
   const { data } = useSession();
-  const id = data?.user?.admin ? data?.user?.adminId : data?.user?.posterId;
+  const id = data?.user?.admin ? data?.user?.adminId : (data?.user?.posterId || data?.user?.id);
   // console.log("data", data);
 
   const { data: fetchedData, isLoading } = useGetData(
