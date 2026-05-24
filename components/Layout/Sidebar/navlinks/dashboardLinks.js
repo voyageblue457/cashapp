@@ -7,23 +7,23 @@ import {
 } from "react-icons/fa";
 
 export const dashboardLinks = [
-  {
-    name: "Dashboard",
-    link: "/",
-    icon: <FaHome />,
-  },
+  // {
+  //   name: "Dashboard",
+  //   link: "/",
+  //   icon: <FaHome />,
+  // },
   {
     name: "Collections",
     link: "/collections",
     icon: <FaEnvelope />,
   },
   {
-    name: "Amount",
+    name: "Transaction ",
     link: "/amount",
     icon: <FaDollarSign />,
   },
   {
-    name: "Posters",
+    name: "Users",
     link: "/posters",
     icon: <FaUsers />,
   },

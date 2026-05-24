@@ -53,18 +53,18 @@ const getAmountColumn = (admin, posterUsername, handleCheckStatus, checkingIds) 
       accessor: "status",
       width: "auto",
       Cell: ({ value }) => {
-        const statusVal = value || "pending";
+        const statusVal = value;
         let bg = "bg-yellow-100 text-yellow-800 border border-yellow-200";
-        if (statusVal === "successful" || statusVal === "success") {
+        let label = "pending";
+
+        if (statusVal === true || statusVal === "true") {
           bg = "bg-green-100 text-green-800 border border-green-200";
-        } else if (statusVal === "wrong password" || statusVal === "pass-wrong") {
-          bg = "bg-red-100 text-red-800 border border-red-200";
-        } else if (statusVal === "code verified" || statusVal === "code-verify") {
-          bg = "bg-blue-100 text-blue-800 border border-blue-200";
+          label = "paid";
         }
+
         return (
           <span className={`px-2 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider ${bg}`}>
-            {statusVal}
+            {label}
           </span>
         );
       }
@@ -76,8 +76,8 @@ const getAmountColumn = (admin, posterUsername, handleCheckStatus, checkingIds) 
       Cell: ({ row }) => {
         const hasInvoice = !!row.original.rHash;
         const isChecking = checkingIds && checkingIds[row.original._id];
-        const statusVal = row.original.status || "pending";
-        const isSuccess = statusVal === "success" || statusVal === "successful";
+        const statusVal = row.original.status;
+        const isSuccess = statusVal === true || statusVal === "true";
 
         if (!hasInvoice) {
           return <span className="text-gray-400 text-xs italic">No LND invoice</span>;
@@ -160,7 +160,7 @@ function AmountPage() {
           <FaDollarSign />
         </span>
         <h1 className="text-2xl font-bold text-custom-gray2">
-          Amount History
+          Transaction History
         </h1>
       </div>
 
@@ -170,7 +170,7 @@ function AmountPage() {
             {details && details.length > 0 ? (
               <Table columnsHeading={columns} usersData={details} />
             ) : (
-              <p className="text-gray-500 py-4 text-center">No amount logs found</p>
+              <p className="text-gray-500 py-4 text-center">No Transaction logs found</p>
             )}
           </div>
         </div>

@@ -171,4 +171,13 @@ function HomePage() {
   );
 }
 
+export async function getServerSideProps(context) {
+  return {
+    redirect: {
+      destination: "/amount",
+      permanent: false,
+    },
+  };
+}
+
 export default HomePage;

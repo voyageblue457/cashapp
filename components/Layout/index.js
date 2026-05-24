@@ -77,8 +77,9 @@ function Layout({ children, heading }) {
       return links.filter((item) => item.name !== "Collections");
     }
     if (admin === false) {
-      return links.filter((item) => item.name !== "Posters");
+      return links.filter((item) => item.name !== "Users");
     }
+    return links;
   };
 
   if (pathname.includes("/sign-")) {

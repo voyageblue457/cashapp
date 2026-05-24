@@ -48,7 +48,7 @@ function useLogin() {
     if (ok) {
       console.log(res);
       toast.success("Signed in Successfully");
-      await router.push("/");
+      await router.push("/amount");
     }
     // else {
     //   toast.error("Something went wrong");

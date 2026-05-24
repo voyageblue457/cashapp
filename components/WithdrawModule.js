@@ -70,8 +70,8 @@ const WithdrawModule = ({ id, admin }) => {
     }
   };
 
-  const summary = summaryData || {};
-  const withdraws = listData?.data || [];
+  const summary = summaryData?.data || {};
+  const withdraws = listData?.data?.data || [];
 
   if (summaryLoading || listLoading) {
     return <Loader isLoading={true} />;

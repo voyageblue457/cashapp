@@ -65,16 +65,6 @@ function Posterspage() {
       label: "Create Link",
       content: <DynamicLinkForm id={id} />,
     },
-    {
-      label: "Create Tag",
-      content: (
-        <TagForm
-          id={id}
-          initialTag={session?.user?.tag}
-          initialShowTagField={session?.user?.showTagField}
-        />
-      ),
-    },
   ];
 
   return (

