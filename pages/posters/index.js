@@ -54,11 +54,11 @@ function Posterspage() {
 
   const tabsData = [
     {
-      label: "All Posters",
+      label: "All Users",
       content: table,
     },
     {
-      label: "Add Poster",
+      label: "Add User",
       content: form,
     },
     {
@@ -73,7 +73,7 @@ function Posterspage() {
         <span className="text-[28px] text-custom-blue2">
           <FaUsers />
         </span>
-        <h1 className="text-2xl font-bold text-custom-gray2">Posters</h1>
+        <h1 className="text-2xl font-bold text-custom-gray2">Users</h1>
       </div>
 
       <Loader isLoading={isLoading}>
