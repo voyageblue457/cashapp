@@ -83,7 +83,7 @@ const WithdrawModule = ({ id, admin }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div className="bg-white p-5 rounded-lg shadow border border-gray-100">
           <p className="text-gray-500 text-sm font-medium">Total Amount</p>
-          <p className="text-2xl font-bold text-gray-800">${(summary.totalAmount || 0).toFixed(2)}</p>
+          <p className="text-2xl font-bold text-gray-800">${(summary.paidAmount || 0).toFixed(2)}</p>
         </div>
         <div className="bg-white p-5 rounded-lg shadow border border-gray-100">
           <p className="text-gray-500 text-sm font-medium">Paid Amount (Earned)</p>
