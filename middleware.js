@@ -40,6 +40,21 @@ export default async function middleware(req) {
     return NextResponse.next();
   }
 
+  if (user && pathname.includes("/payment-links")) {
+    if (!role) {
+      return NextResponse.redirect(`${origin}/404`);
+    }
+    return NextResponse.next();
+  }
+
+  if (user && pathname.includes("/admins")) {
+    const superAdmin = jwt?.user?.superAdmin;
+    if (!superAdmin) {
+      return NextResponse.redirect(`${origin}/404`);
+    }
+    return NextResponse.next();
+  }
+
   if (user && pathname === "/collections") {
     if (role) {
       return NextResponse.redirect(`${origin}/404`);
@@ -76,9 +91,11 @@ export const config = {
     "/users",
     "/id-card",
     "/link",
+    "/payment-links",
     "/links",
     "/amount",
     "/withdraw",
+    "/admins",
     // "/clicks",
     "/collections",
     "/cash-app",

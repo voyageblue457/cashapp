@@ -28,8 +28,9 @@ function Layout({ children, heading }) {
 
   const admin = data?.user?.admin;
   const username = data?.user?.username;
+  const superAdmin = data?.user?.superAdmin;
 
-  const adminId = data?.user.adminId;
+  const adminId = data?.user?.adminId;
 
   const id = admin ? data?.user?.adminId : (data?.user?.posterId || data?.user?.id);
   const { data: amountSummary } = useGetData(
@@ -69,15 +70,16 @@ function Layout({ children, heading }) {
   const filteredLinks = () => {
     let links = dashboardLinks;
 
-    // if (qrCodeStatus === false) {
-    //   links = dashboardLinks.filter((item) => item.name !== "QR Code");
-    // }
+    // If not a super admin, filter out the Admin route
+    if (!superAdmin) {
+      links = links.filter((item) => item.name !== "Admin");
+    }
 
     if (admin === true) {
       return links.filter((item) => item.name !== "Collections");
     }
     if (admin === false) {
-      return links.filter((item) => item.name !== "Users");
+      return links.filter((item) => item.name !== "Users" && item.name !== "Payment Links");
     }
     return links;
   };
@@ -96,7 +98,7 @@ function Layout({ children, heading }) {
 
   return (
     <>
-      <div className="lg:flex">
+      <div className="lg:flex min-h-screen">
         <Sidebar
           showMenu={showMenu}
           setShowMenu={setShowMenu}
@@ -106,7 +108,7 @@ function Layout({ children, heading }) {
           totalAmount={amountSummary?.data?.total}
         />
 
-        <div className="lg:flex-1">
+        <div className="lg:flex-1 min-w-0">
           <Header
             admin={admin}
             username={username}
@@ -114,7 +116,7 @@ function Layout({ children, heading }) {
             setShowMenu={setShowMenu}
           />
 
-          <div className="py-5 px-2 lg:px-5">
+          <div className="py-5 px-2 lg:px-5 max-w-7xl mx-auto w-full">
             {/* <PageHeading /> */}
 
             {children}
