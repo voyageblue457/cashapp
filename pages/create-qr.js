@@ -254,7 +254,7 @@ export default function CreateQRPage() {
     }
 
     const targetUserId = ownerId === "admin" ? userId : ownerId;
-    const targetIsAdmin = ownerId === "admin" ? true : false;
+    const targetIsAdmin = admin && ownerId === "admin";
 
     setLoading(true);
     try {
