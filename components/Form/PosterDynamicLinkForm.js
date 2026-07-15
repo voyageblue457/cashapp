@@ -148,12 +148,14 @@ function PosterDynamicLinkForm({ id, assignedLinks, refetchDynamicLinks: parentR
     baseLink: "",
     path: "",
     theme: "Cash Green",
+    defaultAmount: "",
   };
 
   const validate = Yup.object({
     baseLink: Yup.string().required("Base Link is required"),
     path: Yup.string().required("Path is required"),
     theme: Yup.string().required("Theme is required"),
+    defaultAmount: Yup.number().typeError("Default Amount must be a number").nullable(),
   });
 
   const handleCopy = (linkName) => {
@@ -199,6 +201,7 @@ function PosterDynamicLinkForm({ id, assignedLinks, refetchDynamicLinks: parentR
       targetUrl: "",
       root: id,
       theme: values.theme,
+      defaultAmount: values.defaultAmount ? Number(values.defaultAmount) : null,
     };
 
     mutate(submitValues, {
@@ -258,6 +261,13 @@ function PosterDynamicLinkForm({ id, assignedLinks, refetchDynamicLinks: parentR
                     name="path"
                     type="text"
                     placeholder="/rahim"
+                  />
+
+                  <TextField
+                    label="Default Amount (Optional)"
+                    name="defaultAmount"
+                    type="text"
+                    placeholder="e.g. 20"
                   />
 
                   <div className="flex flex-col">
