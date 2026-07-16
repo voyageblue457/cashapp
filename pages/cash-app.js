@@ -2,7 +2,6 @@ import { useSession } from "next-auth/react";
 import { FaEnvelope } from "react-icons/fa";
 import Loader from "../components/common/Loader";
 import Table from "../components/Table";
-import { collectionColumn } from "../components/Table/columns/collectionColumn";
 import { cashAppColumn } from "../components/Table/columns/cashAppColumn";
 import useGetData from "../hooks/useGetData";
 

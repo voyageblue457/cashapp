@@ -1,23 +1,48 @@
-import { getSession, useSession } from "next-auth/react";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { FaEnvelope } from "react-icons/fa";
 import Loader from "../components/common/Loader";
 import Table from "../components/Table";
-import { collectionColumn } from "../components/Table/columns/collectionColumn";
+import { getCollectionColumn } from "../components/Table/columns/collectionColumn";
 import { API_URL } from "../config";
 import useGetData from "../hooks/useGetData";
+import { toast } from "react-toastify";
 
 function CollectionsPage() {
-  // const { username, password, posterId, links, details } = data?.data;
+  const { data: session } = useSession();
+  const id = session?.user?.id;
+  const [checkingIds, setCheckingIds] = useState({});
 
-  const { data } = useSession();
-  const id = data?.user?.id;
-  // console.log("poster session", id);
+  const { data: fetchedData, isLoading, refetch } = useGetData(`/posters/details/${id}`);
 
-  const { data: fetchedData, isLoading } = useGetData(`/posters/details/${id}`);
+  const handleCheckStatus = async (infoId) => {
+    setCheckingIds((prev) => ({ ...prev, [infoId]: true }));
+    try {
+      const res = await fetch(`${API_URL}/payment/check/${infoId}`);
+      const data = await res.json();
+      if (data && data.success) {
+        toast.success("Payment verified & marked as Paid!");
+        refetch();
+      } else {
+        toast.info(data.error || "Payment is still pending.");
+      }
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+      toast.error("Failed to verify payment status. Try again.");
+    } finally {
+      setCheckingIds((prev) => ({ ...prev, [infoId]: false }));
+    }
+  };
 
-  const details = fetchedData?.data?.data?.details;
+  const posterData = fetchedData?.data?.data;
+  const details = posterData?.details?.map(item => ({
+    ...item,
+    owner: posterData?.root?.username,
+    admin: posterData?.root?.adminId,
+    posterUsername: posterData?.username
+  })) || [];
 
-  console.log(details);
+  const columns = getCollectionColumn(handleCheckStatus, checkingIds);
 
   return (
     <div className="relative">
@@ -31,8 +56,10 @@ function CollectionsPage() {
       <Loader isLoading={isLoading}>
         <div className="mt-7">
           <div className="p-4 bg-white rounded shadow-md lg:p-8">
-            {details && (
-              <Table columnsHeading={collectionColumn} usersData={details} />
+            {details.length > 0 ? (
+              <Table columnsHeading={columns} usersData={details} />
+            ) : (
+              <p className="">No details found</p>
             )}
           </div>
         </div>
@@ -42,3 +69,4 @@ function CollectionsPage() {
 }
 
 export default CollectionsPage;
+
