@@ -86,12 +86,12 @@ const getAmountColumn = (admin, posterUsername, handleCheckStatus, checkingIds) 
         const statusVal = row.original.status;
         const isSuccess = statusVal === true || statusVal === "true";
 
-        if (!hasInvoice) {
-          return <span className="text-gray-400 text-xs italic">No LND invoice</span>;
-        }
-
         if (isSuccess) {
           return <span className="text-green-600 font-bold text-xs uppercase tracking-wider">Paid / Verified</span>;
+        }
+
+        if (!hasInvoice) {
+          return <span className="text-gray-400 text-xs italic">No LND invoice</span>;
         }
 
         return (
