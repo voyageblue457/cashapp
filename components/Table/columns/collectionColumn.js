@@ -104,3 +104,5 @@ export const getCollectionColumn = (handleCheckStatus, checkingIds) => [
     ),
   },
 ];
+
+export const collectionColumn = getCollectionColumn(null, null);

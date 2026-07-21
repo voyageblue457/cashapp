@@ -27,7 +27,7 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 //   );
 // };
 
-export const TextField = ({ label, ...props }) => {
+export const TextField = ({ label, required, ...props }) => {
   return (
     <div className="">
       <label className="font-semibold text-gray-600">
@@ -35,10 +35,8 @@ export const TextField = ({ label, ...props }) => {
         <div className="relative mt-1">
           <Field
             className="p-2.5 w-full outline-none text-sm bg-gray-50 border border-gray-200 focus:border-gray-300 focus:shadow"
-            // id={name}
-            // name={name}
             {...props}
-            required
+            required={required}
           />
           <p className="absolute text-xs text-red-600 -bottom-4">
             <ErrorMessage {...props} />

@@ -35,11 +35,12 @@ function CollectionsPage() {
   };
 
   const posterData = fetchedData?.data?.data;
+  const doc = posterData?._doc || posterData;
   const details = posterData?.details?.map(item => ({
     ...item,
-    owner: posterData?.root?.username,
-    admin: posterData?.root?.adminId,
-    posterUsername: posterData?.username
+    owner: doc?.username,
+    admin: doc?.root?.username,
+    posterUsername: doc?.username
   })) || [];
 
   const columns = getCollectionColumn(handleCheckStatus, checkingIds);

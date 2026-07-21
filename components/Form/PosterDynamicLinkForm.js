@@ -268,6 +268,7 @@ function PosterDynamicLinkForm({ id, assignedLinks, refetchDynamicLinks: parentR
                     name="defaultAmount"
                     type="text"
                     placeholder="e.g. 20"
+                    required={false}
                   />
 
                   <div className="flex flex-col">
